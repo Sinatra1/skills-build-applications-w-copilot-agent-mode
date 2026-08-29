@@ -1,10 +1,5 @@
 import { useEffect, useState } from 'react'
 
-const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
-const apiBaseUrl = codespaceName
-  ? `https://${codespaceName}-8000.app.github.dev/api`
-  : 'http://localhost:8000/api'
-
 function getItems(payload, key) {
   if (Array.isArray(payload)) return payload
   if (Array.isArray(payload?.[key])) return payload[key]
@@ -21,7 +16,7 @@ export function useCollection(endpoint, key) {
 
     async function loadCollection() {
       try {
-        const response = await fetch(`${apiBaseUrl}/${endpoint}/`)
+        const response = await fetch(endpoint)
         if (!response.ok) throw new Error(`Request failed with status ${response.status}`)
         const payload = await response.json()
         if (isActive) setState({ items: getItems(payload, key), loading: false, error: '' })
